@@ -1,0 +1,12 @@
+pkgname = test
+pkgbase = test
+pkgver = 0.0.1-1
+pkgdesc = A test pkg
+url = http://www.example.org/test
+builddate = 1756885796
+packager = Unknown Packager
+size = 0
+arch = aarch64
+xdata = pkgtype=pkg
+license = GPL-2.0-or-later
+license = LGPL-2.0-or-later

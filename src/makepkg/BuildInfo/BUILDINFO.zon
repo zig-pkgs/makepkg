@@ -1,0 +1,13 @@
+.{
+    .pkgname = "test",
+    .pkgbase = "test",
+    .pkgver = "0.0.1-1",
+    .pkgarch = .{.aarch64},
+    .pkgbuild_sha256sum = "7056c04df17a4e0f0bac9f787f347c9cd892cee6323d1c89528090afd0b934a3",
+    .builddate = 1756885796,
+    .packager = "Unknown Packager",
+    .builddir = "/build",
+    .startdir = "/startdir",
+    .buildtool = "devtools",
+    .buildtoolver = "1:1.0.4-1-any",
+}
