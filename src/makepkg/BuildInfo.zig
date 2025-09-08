@@ -20,7 +20,7 @@ pub const Format = enum(u8) {
     v2,
 };
 
-pub fn fmt(value: BuildInfo) Formatter(BuildInfo) {
+pub fn fmt(value: BuildInfo) Formatter(BuildInfo, .info) {
     return .{ .value = value };
 }
 

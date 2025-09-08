@@ -135,6 +135,8 @@ fn make(step: *Step, options: Step.MakeOptions) !void {
         .xdata = &.{
             .{ .pkgtype = .pkg },
         },
+        .group = pkgbuild.groups,
+        .backup = pkgbuild.backup,
     };
 
     const pkg_info_bytes = formatPrint(bw, pkg_info) catch |err| {

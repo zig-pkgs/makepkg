@@ -37,7 +37,7 @@ pub const PkgType = enum {
     split,
 };
 
-pub fn fmt(value: PkgInfo) Formatter(PkgInfo) {
+pub fn fmt(value: PkgInfo) Formatter(PkgInfo, .info) {
     return .{ .value = value };
 }
 

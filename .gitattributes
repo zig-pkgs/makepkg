@@ -1,0 +1,2 @@
+src/makepkg/Repo/Db/core.db.tar.gz filter=lfs diff=lfs merge=lfs -text
+src/makepkg/Repo/Db/extra.db.tar.gz filter=lfs diff=lfs merge=lfs -text

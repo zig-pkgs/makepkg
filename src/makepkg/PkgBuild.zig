@@ -13,7 +13,15 @@ configure_args: ?[]const [:0]const u8 = null,
 sources: common.Sources,
 
 license: ?[]const License = null,
-makedepends: ?[]const [:0]const u8 = null,
+groups: ?[]const [:0]const u8 = null,
+backup: ?[]const [:0]const u8 = null,
+depends: ?[]const common.Dependency = null,
+makedepends: ?[]const common.Dependency = null,
+checkdepends: ?[]const common.Dependency = null,
+optdepends: ?[]const common.Dependency = null,
+conflicts: ?[]const common.Dependency = null,
+provides: ?[]const common.Dependency = null,
+replaces: ?[]const common.Dependency = null,
 
 options: ?[]const common.Options = null,
 
@@ -21,6 +29,7 @@ subpackages: ?[]const PkgBuild = null,
 
 pub fn selectArch(self: PkgBuild, build_arch: common.Arch) error{UnsupportedArch}!common.Arch {
     // This package supports for all arch
+    std.debug.assert(build_arch != .any);
     if (self.arch[0] == .any) return .any;
     for (self.arch) |arch| {
         if (arch == build_arch) return build_arch;
@@ -60,6 +69,7 @@ pub fn parse(gpa: mem.Allocator, reader: *std.Io.Reader) !ParseResult {
     const pkgbuild_src = try allocating.toOwnedSliceSentinel(0);
     defer gpa.free(pkgbuild_src);
 
+    @setEvalBranchQuota(2000);
     const pkgbuild = try zon.parse.fromSliceAlloc(PkgBuild, gpa, pkgbuild_src, &diag, .{});
 
     var pkgbuild_digest: [Sha256.digest_length]u8 = undefined;
