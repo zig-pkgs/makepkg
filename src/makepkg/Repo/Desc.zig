@@ -1,15 +1,16 @@
 pub const Map = std.StringHashMap(Desc);
+pub const RefMap = std.StringHashMap(*const Desc);
 
 filename: [:0]const u8 = &.{},
 name: [:0]const u8 = &.{},
 base: [:0]const u8 = &.{},
 version: [:0]const u8 = &.{},
 desc: [:0]const u8 = &.{},
-csize: usize = 0,
-isize: usize = 0,
+csize: u64 = 0,
+isize: u64 = 0,
 md5sum: ?[:0]const u8 = null,
 sha256sum: [:0]const u8 = &.{},
-pgpsig: [:0]const u8 = &.{},
+pgpsig: ?[:0]const u8 = null,
 url: [:0]const u8 = &.{},
 license: ?[]const [:0]const u8 = null,
 arch: common.Arch = .any,

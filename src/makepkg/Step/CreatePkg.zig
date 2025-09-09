@@ -151,6 +151,7 @@ fn make(step: *Step, options: Step.MakeOptions) !void {
     // We want to open directory zig-cache/o/HASH/libavutil/
     // but keep output_dir as zig-cache/o/HASH for -I include
     const sub_path_dirname = b.pathJoin(&.{ "o", &digest });
+    const sub_path_config = b.pathJoin(&.{ sub_path_dirname, "config.zon" });
     const sub_path_buildinfo = b.pathJoin(&.{ sub_path_dirname, ".BUILDINFO" });
     const sub_path_pkginfo = b.pathJoin(&.{ sub_path_dirname, ".PKGINFO" });
 
@@ -159,6 +160,12 @@ fn make(step: *Step, options: Step.MakeOptions) !void {
     b.cache_root.handle.makePath(sub_path_dirname) catch |err| {
         return step.fail("unable to make path '{f}{s}': {s}", .{
             b.cache_root, sub_path_dirname, @errorName(err),
+        });
+    };
+
+    b.cache_root.handle.writeFile(.{ .sub_path = sub_path_config, .data = build_info_bytes }) catch |err| {
+        return step.fail("unable to write file '{f}{s}': {s}", .{
+            b.cache_root, sub_path_config, @errorName(err),
         });
     };
 
@@ -177,22 +184,35 @@ fn make(step: *Step, options: Step.MakeOptions) !void {
     const full_pkgname = try result.pkgName(gpa, create_pkg.arch);
     const pkggen_exe = create_pkg.pkggen_exe;
     const exe_path = pkggen_exe.installed_path orelse pkggen_exe.generated_bin.?.path.?;
+    const config_path = try b.cache_root.join(gpa, &.{sub_path_config});
+
+    {
+        var config = try b.cache_root.handle.createFile(sub_path_config, .{});
+        defer config.close();
+
+        var buffer: [8 * 1024]u8 = undefined;
+        var config_writer = config.writer(&buffer);
+
+        const genpkg_options: common.GeneratePkgOptions = .{
+            .pkgname = full_pkgname,
+            .pkgdir = pkg_path_str,
+            .destdir = generated_dir,
+            .pkginfo = try b.cache_root.join(gpa, &.{sub_path_pkginfo}),
+            .buildinfo = try b.cache_root.join(gpa, &.{sub_path_buildinfo}),
+        };
+        try std.zon.stringify.serialize(genpkg_options, .{}, &config_writer.interface);
+
+        try config_writer.interface.flush();
+    }
 
     var argv_list: std.ArrayList([]const u8) = .{};
     defer argv_list.deinit(gpa);
 
     try argv_list.appendSlice(gpa, &.{
         exe_path,
-        "--pkg-dir",
-        pkg_path_str,
-        "--pkg-info",
-        try b.cache_root.join(gpa, &.{sub_path_pkginfo}),
-        "--build-info",
-        try b.cache_root.join(gpa, &.{sub_path_buildinfo}),
-        "--pkg-name",
-        full_pkgname,
-        "--dest-dir",
-        generated_dir,
+        "genpkg",
+        "--config",
+        config_path,
     });
 
     var code: u8 = undefined;

@@ -36,6 +36,14 @@
             .url = "git+https://github.com/zig-pkgs/archive-zig#2e36e9f9f6b6a32117b4a7155e0560376086ae40",
             .hash = "archive-3.8.1-BUc3RHTeAACIgS_v0nWp_QO2u10VdLS__shyZFEPIJwl",
         },
+        .alpm = .{
+            .url = "git+https://github.com/zig-pkgs/alpm-zig.git#ded4b6d87de50fe621b25aab72bc1a63963614c1",
+            .hash = "alpm-0.0.0-xaJgkgBMAgA15N-aleMRJNbkmpV4IwoG1bJB4aS2SCJo",
+        },
+        .container = .{
+            .url = "git+https://github.com/zig-pkgs/container.git#ef647f4ba006444df3ee1a3e52754623f49fe524",
+            .hash = "container-0.0.1-G6ZpcW5vAAC3XuhrpM0vST1TJlxw65rD04SOQsNFqVY7",
+        },
     },
     .paths = .{
         "build.zig",

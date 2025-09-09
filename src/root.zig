@@ -9,7 +9,7 @@ pub const BuildInfo = @import("makepkg/BuildInfo.zig");
 pub const PkgBuild = @import("makepkg/PkgBuild.zig");
 pub const package = @import("makepkg/package.zig");
 pub const mtree = @import("makepkg/mtree.zig");
-pub const Repo = @import("makepkg/Repo.zig");
+pub const SyncDbs = @import("makepkg/SyncDbs.zig");
 
 const default_packager = "Unknown Packager";
 
@@ -109,6 +109,6 @@ test {
     _ = PkgInfo;
     _ = BuildInfo;
     _ = PkgBuild;
-    _ = Repo;
+    _ = SyncDbs;
     _ = @import("makepkg/test.zig");
 }

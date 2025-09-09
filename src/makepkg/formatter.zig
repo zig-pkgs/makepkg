@@ -97,32 +97,51 @@ pub fn Serializer(comptime kind: Kind) type {
                         else => comptime unreachable,
                     }
                 },
-                .@"union" => try self.printUnion(name, val),
+                .@"union" => try self.printUnion(name, val, false),
                 .@"enum" => try self.enumFmt(name, val, false),
                 else => comptime unreachable,
             }
         }
 
-        pub fn printUnion(self: *@This(), name: []const u8, val: anytype) std.Io.Writer.Error!void {
-            comptime assert(kind != .desc);
-            switch (val) {
-                inline else => |inner, tag| {
-                    switch (@typeInfo(@TypeOf(inner))) {
-                        .bool => {
-                            try self.writer.print("{s} ={s}{s}\n", .{
-                                name,
-                                if (inner) " " else " !",
-                                @tagName(tag),
-                            });
+        pub fn printUnion(self: *@This(), name: []const u8, val: anytype, root: bool) std.Io.Writer.Error!void {
+            if (kind == .desc and root) try self.writeSection(name);
+            switch (kind) {
+                .info => {
+                    switch (val) {
+                        inline else => |inner, tag| {
+                            switch (@typeInfo(@TypeOf(inner))) {
+                                .bool => {
+                                    try self.writer.print("{s} ={s}{s}\n", .{
+                                        name,
+                                        if (inner) " " else " !",
+                                        @tagName(tag),
+                                    });
+                                },
+                                .@"enum" => {
+                                    try self.writer.print("{s} = {s}={s}\n", .{
+                                        name,
+                                        @tagName(tag),
+                                        @tagName(inner),
+                                    });
+                                },
+                                else => comptime unreachable,
+                            }
                         },
-                        .@"enum" => {
-                            try self.writer.print("{s} = {s}={s}\n", .{
-                                name,
-                                @tagName(tag),
-                                @tagName(inner),
-                            });
+                    }
+                },
+                .desc => {
+                    switch (val) {
+                        inline else => |inner, tag| {
+                            switch (@typeInfo(@TypeOf(inner))) {
+                                .@"enum" => {
+                                    try self.writer.print("{s}={s}\n", .{
+                                        @tagName(tag),
+                                        @tagName(inner),
+                                    });
+                                },
+                                else => comptime unreachable,
+                            }
                         },
-                        else => comptime unreachable,
                     }
                 },
             }

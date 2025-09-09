@@ -6,11 +6,11 @@ pkgdesc: [:0]const u8,
 url: [:0]const u8,
 builddate: i64,
 packager: [:0]const u8,
-size: usize,
+size: u64,
 arch: []const common.Arch,
 
 // It is mandatory to have at least one xdata entry that defines the pkgtype.
-xdata: []const ExtraData,
+xdata: []const common.ExtraData,
 
 // The following keywords are optional and can be included zero or more times:
 license: ?[]const Licence = null,
@@ -24,18 +24,7 @@ optdepend: ?[]const [:0]const u8 = null,
 makedepend: ?[]const [:0]const u8 = null,
 checkdepend: ?[]const [:0]const u8 = null,
 
-pub const ExtraData = union(enum) {
-    pkgtype: PkgType,
-};
-
 pub const Licence = @import("license.zig").License;
-
-pub const PkgType = enum {
-    debug,
-    pkg,
-    src,
-    split,
-};
 
 pub fn fmt(value: PkgInfo) Formatter(PkgInfo, .info) {
     return .{ .value = value };

@@ -1,10 +1,10 @@
 pkgname: [:0]const u8,
 pkgbase: ?[:0]const u8 = null,
 pkgver: std.SemanticVersion,
-pkgrel: usize,
+pkgrel: u64,
 url: [:0]const u8,
 arch: []const common.Arch,
-epoch: usize = 0,
+epoch: u64 = 0,
 pkgdesc: [:0]const u8,
 
 build_style: common.BuildStyle,

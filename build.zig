@@ -28,6 +28,17 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const alpm_dep = b.dependency("alpm", .{
+        .with_gpgme = false,
+        .target = target,
+        .optimize = optimize,
+    });
+
+    const container_dep = b.dependency("container", .{
+        .target = target,
+        .optimize = optimize,
+    });
+
     const mod = b.addModule("makepkg", .{
         .root_source_file = b.path("src/root.zig"),
         .target = target,
@@ -45,6 +56,8 @@ pub fn build(b: *std.Build) void {
             .optimize = optimize,
             .imports = &.{
                 .{ .name = "makepkg", .module = mod },
+                .{ .name = "alpm", .module = alpm_dep.module("alpm") },
+                .{ .name = "container", .module = container_dep.module("container") },
             },
         }),
     });
