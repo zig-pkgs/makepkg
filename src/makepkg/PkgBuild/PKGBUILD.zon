@@ -1,6 +1,6 @@
 .{
     .pkgname = "helloworld",
-    .pkgver = .{ .major = 0, .minor = 0, .patch = 1 },
+    .pkgver = "0.0.1",
     .pkgrel = 1,
     .build_style = .makefile,
     .pkgdesc = "hello world program to be built in the testsuite",

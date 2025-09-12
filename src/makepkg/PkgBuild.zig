@@ -1,6 +1,6 @@
 pkgname: [:0]const u8,
 pkgbase: ?[:0]const u8 = null,
-pkgver: std.SemanticVersion,
+pkgver: [:0]const u8,
 pkgrel: u64,
 url: [:0]const u8,
 arch: []const common.Arch,
@@ -86,12 +86,12 @@ fn parseVersion(self: *const PkgBuild, gpa: mem.Allocator) ![:0]const u8 {
     var allocating: std.Io.Writer.Allocating = .init(gpa);
     defer allocating.deinit();
     if (self.epoch == 0)
-        try allocating.writer.print("{f}-{d}", .{
+        try allocating.writer.print("{s}-{d}", .{
             self.pkgver,
             self.pkgrel,
         })
     else
-        try allocating.writer.print("{d}:{f}-{d}", .{
+        try allocating.writer.print("{d}:{s}-{d}", .{
             self.epoch,
             self.pkgver,
             self.pkgrel,
